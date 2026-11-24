@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>公考智囊 AI · RAG 问答系统演示</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="desktop-stage">
+    <div class="phone-frame">
+      <!-- 桌面端模拟手机顶部状态栏 -->
+      <div class="phone-status-bar">
+        <span class="status-time" id="status-time">10:20</span>
+        <div class="phone-notch"></div>
+        <div class="status-icons">
+          <span>5G</span>
+          <span class="battery-icon"><span></span></span>
+        </div>
+      </div>
+
+      <!-- 应用主体 -->
+      <div class="app-shell">
+        <!-- 顶部导航栏 -->
+        <header class="app-header">
+          <div class="header-left">
+            <div class="app-logo">考</div>
+            <div>
+              <h1 class="app-title">公考智囊 AI</h1>
+              <p class="app-subtitle">
+                <span class="dot-online"></span>RAG 知识库已就绪 · 2026国省考
+              </p>
+            </div>
+          </div>
+          <button class="btn-icon-text" id="btn-reset-chat" title="开启新对话">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            新对话
+          </button>
+        </header>
+
+        <!-- 视图 1：AI 问答 (RAG 对话) -->
+        <main class="tab-view active" id="view-chat">
+          <!-- 科目筛选胶囊 -->
+          <div class="filter-bar" id="chat-subject-bar">
+            <button class="filter-pill active" data-subject="全部">全部</button>
+            <button class="filter-pill" data-subject="行测">行测</button>
+            <button class="filter-pill" data-subject="申论">申论</button>
+            <button class="filter-pill" data-subject="面试">面试</button>
+            <button class="filter-pill" data-subject="时政">时政热点</button>
+          </div>
+
+          <!-- 聊天消息流 -->
+          <div class="chat-messages" id="chat-messages">
+            <!-- 由 app.js 动态渲染欢迎卡片与对话内容 -->
+          </div>
+
+          <!-- 底部输入栏 -->
+          <div class="chat-input-area">
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="chat-input"
+                placeholder="输入考公问题，如：申论怎么破题？"
+                autocomplete="off"
+              />
+              <button class="btn-send" id="btn-send" aria-label="发送">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </main>
+
+        <!-- 视图 2：模拟测试 -->
+        <main class="tab-view" id="view-quiz">
+          <div class="quiz-container" id="quiz-container">
+            <!-- 由 app.js 动态渲染选题、答题与成绩报告 -->
+          </div>
+        </main>
+
+        <!-- 视图 3：考公知识库速查 -->
+        <main class="tab-view" id="view-kb">
+          <div class="kb-search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="text" id="kb-search-input" placeholder="搜索行测公式、申论模板、时政要点..." />
+          </div>
+
+          <div class="filter-bar" id="kb-subject-bar">
+            <button class="filter-pill active" data-subject="全部">全部</button>
+            <button class="filter-pill" data-subject="行测">行测</button>
+            <button class="filter-pill" data-subject="申论">申论</button>
+            <button class="filter-pill" data-subject="面试">面试</button>
+            <button class="filter-pill" data-subject="时政">时政</button>
+          </div>
+
+          <div class="scroll-list" id="kb-list">
+            <!-- 由 app.js 渲染知识库卡片 -->
+          </div>
+        </main>
+
+        <!-- 视图 3：我的收藏 -->
+        <main class="tab-view" id="view-fav">
+          <div class="fav-header-tip">
+            <span>已收藏的问答与考点（本地保存）</span>
+            <button class="btn-text-danger" id="btn-clear-fav">清空</button>
+          </div>
+          <div class="scroll-list" id="fav-list">
+            <!-- 由 app.js 渲染收藏列表 -->
+          </div>
+        </main>
+
+        <!-- 底部 Tab 导航栏 -->
+        <nav class="tab-bar">
+          <button class="tab-item active" data-target="view-chat">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>AI 问答</span>
+          </button>
+          <button class="tab-item" data-target="view-quiz">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"/>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            <span>模拟测试</span>
+          </button>
+          <button class="tab-item" data-target="view-kb">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            <span>知识库</span>
+          </button>
+          <button class="tab-item" data-target="view-fav">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            <span>收藏夹</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- 桌面端模拟手机底部 Home 条 -->
+      <div class="phone-home-bar"><span></span></div>
+
+      <!-- RAG 引用来源底部抽屉 -->
+      <div class="sheet-backdrop" id="citation-backdrop">
+        <div class="bottom-sheet" id="citation-sheet">
+          <div class="sheet-handle"></div>
+          <div class="sheet-header">
+            <div>
+              <span class="sheet-badge" id="sheet-category">真题来源</span>
+              <span class="sheet-score" id="sheet-score">匹配度 95%</span>
+            </div>
+            <button class="btn-close-sheet" id="btn-close-sheet">✕</button>
+          </div>
+          <h3 class="sheet-title" id="sheet-title">来源标题</h3>
+          <div class="sheet-content" id="sheet-content">原文摘录内容...</div>
+        </div>
+      </div>
+
+      <!-- 轻提示 Toast -->
+      <div class="toast" id="toast">已复制到剪贴板</div>
+    </div>
+  </div>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
